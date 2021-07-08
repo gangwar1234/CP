@@ -1,0 +1,5 @@
+16:13:37 **** Rebuild of configuration Debug for project Hello_World ****
+Info: Internal Builder is used for build
+icpc -g -O0 -c -o src/main.o ../src/main.cpp 
+icpc -O0 -o Hello_World src/main.o 
+Info: Nothing to build for Hello_World
