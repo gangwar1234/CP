@@ -50,36 +50,83 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n; cin >> n; vl v(n); cin >> v;
 
-	string s; cin >> n >> s;
+	vector<vector<lo>>m;
 
-	bool disbalace  = false;
-
-	for(int i = 0; i < n; i++)
+	for(int i = 1; i < n; i++)
 	{
-		if(s[i] == '(')open++;
-		else close++;
+		lo y = v[i] - v[0];
+		lo x = i;
+		lo g = gcd(x,y);
 
-		if(close > open)
+		y/=g;
+		x/=g;
+
+		m.push_back({y,x});
+	}
+
+	for(int i = 0; i < m.size(); i++)
+	{
+		auto a = m[i];
+
+		map<lo,bool>mp;
+		mp[0] = true;
+
+		for(int j = 1; j < n; j++)
 		{
-			disbalace = true;
+			lo y = v[j] - v[0];
+			lo x = j;
+			lo g = gcd(x,y);
+
+			y/=g;
+			x/=g;
+
+			if(y == a[0] && x == a[1]){mp[j] = true;}
 		}
-		else if(close == open)
+
+		lo fr = INT_MIN, sc = INT_MIN; vl t = {INT_MIN,INT_MIN};
+
+		bool flag = true;
+
+		for(int j = 0; j < n; j++)
 		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			if(mp.count(j) == 0)
+			{
+				if(fr == INT_MIN)
+				{
+					fr = v[j];
+					sc = j;
+				}
+				else
+				{
+					if(t[0] == INT_MIN)
+					{
+						lo y = v[j] - fr;
+						lo x = j - sc;
+						lo g = gcd(x,y);
+
+						y/=g;
+						x/=g;	
+
+						if(y != t[0] || x != t[1])
+						{
+							flag = false;
+							break;
+						}					
+					}
+				}
+			}
+		}
+
+		if(flag)
+		{
+			cout << "YES" << endl;
+			return;
 		}
 	}
 
-	if(disbalace || open != close)
-	{
-		cout << -1 << endl; return;
-	}
-
-	cout << res << endl;
+	cout << "NO" << endl;
 }
 
 int main()

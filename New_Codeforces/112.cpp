@@ -50,36 +50,38 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo m, s, i = 0; cin >> m >> s;
 
-	string s; cin >> n >> s;
+	if(9*m < s || (m > 1 && s == 0)){cout << "-1 -1" << endl; return;}
 
-	bool disbalace  = false;
+	lo nines = s/9;
+	lo others = s%9;
 
-	for(int i = 0; i < n; i++)
+	string max = string(nines, '9');
+
+	if(others)max += (others+'0');
+
+	while(max.length() < m)max += "0";
+
+	string min = "";
+
+	s -= 1;
+
+	nines = s/9;
+	others = s%9;
+
+	debug(others);
+
+	for(int i = m-1; i >= 1; i--)
 	{
-		if(s[i] == '(')open++;
-		else close++;
-
-		if(close > open)
-		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
-		}
+		if(nines > 0){min = "9" + min; nines--;}
+		else if(others > 0){min = string(1, others + '0') + min; others = 0;}
+		else min = "0" + min;
 	}
 
-	if(disbalace || open != close)
-	{
-		cout << -1 << endl; return;
-	}
+	min = string(1, others + 1 + '0') + min;
 
-	cout << res << endl;
+	cout << min << " " << max << endl;
 }
 
 int main()

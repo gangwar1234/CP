@@ -50,33 +50,33 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo ax, ay, bx, by, fx, fy;
 
-	string s; cin >> n >> s;
+	cin >> ax >> ay >> bx >> by >> fx >> fy;
 
-	bool disbalace  = false;
+	lo res = abs(ax-bx) + abs(ay-by);
 
-	for(int i = 0; i < n; i++)
+	if(ax == bx && fx == ax)
 	{
-		if(s[i] == '(')open++;
-		else close++;
-
-		if(close > open)
+		if(ay > by)
 		{
-			disbalace = true;
+			if(fy > by && fy < ay)res+=2;
 		}
-		else if(close == open)
+		else
 		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			if(fy < by && fy > ay)res+=2;
 		}
 	}
-
-	if(disbalace || open != close)
+	else if(ay == by && fy == ay)
 	{
-		cout << -1 << endl; return;
+		if(ax > bx)
+		{
+			if(fx > bx && fx < ax)res+=2;
+		}
+		else
+		{
+			if(fx < bx && fx > ax)res+=2;
+		}
 	}
 
 	cout << res << endl;
@@ -94,7 +94,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

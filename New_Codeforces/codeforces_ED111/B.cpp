@@ -50,36 +50,36 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n, a, b; cin >> n >> a >> b;
 
-	string s; cin >> n >> s;
+	string s; cin >> s;
 
-	bool disbalace  = false;
-
-	for(int i = 0; i < n; i++)
+	if(b > 0)
 	{
-		if(s[i] == '(')open++;
-		else close++;
+		cout << n*(a+b) << endl; return;
+	}
 
-		if(close > open)
+	lo cnt0 = 0, cnt1 = 0;
+
+	bool zero = false, one = false;
+
+	if(s[0] == '0')zero = true; else one = true;
+
+	for(int i = 1; i < n; i++)
+	{
+		if(s[i] != s[i-1])
 		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			if(s[i-1] == '0'){cnt0++; one = true; zero = false;}
+			else {cnt1++; zero = true; one = false;}
 		}
 	}
 
-	if(disbalace || open != close)
-	{
-		cout << -1 << endl; return;
-	}
+	if(one)cnt1++; if(zero)cnt0++;
 
-	cout << res << endl;
+	// cout << cnt0 << " " << cnt1 << endl;
+
+	cout << (min(cnt0, cnt1) + 1)*b + n*a << endl;
+
 }
 
 int main()
@@ -94,7 +94,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

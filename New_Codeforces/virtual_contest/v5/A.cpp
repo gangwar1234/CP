@@ -50,36 +50,42 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n, op = 0, j = 0, sum1 = 0, sum2 = 0; cin >> n; vl a(n), b(n); cin >> a >> b;
 
-	string s; cin >> n >> s;
-
-	bool disbalace  = false;
+	vector<vector<lo>>moreIdx;
 
 	for(int i = 0; i < n; i++)
 	{
-		if(s[i] == '(')open++;
-		else close++;
-
-		if(close > open)
+		if(a[i] > b[i])
 		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			moreIdx.push_back({i + 1, a[i]-b[i]});
+			op += (a[i] - b[i]);
 		}
 	}
 
-	if(disbalace || open != close)
+
+	sum1 = accumulate(a.begin(), a.end(), 0);
+	sum2 = accumulate(b.begin(), b.end(), 0);
+
+	if(sum1 != sum2)
 	{
 		cout << -1 << endl; return;
 	}
 
-	cout << res << endl;
+	cout << op << endl;
+
+	for(int i = 0; i < n; i++)
+	{
+		while(a[i] < b[i])
+		{
+			if(moreIdx[j][1] == 0)j++;
+			cout << moreIdx[j][0] << " " << i + 1 << endl;
+			moreIdx[j][1]--;
+			a[i]++;
+			a[moreIdx[j][0]-1]--;
+		}
+		
+	}
 }
 
 int main()
@@ -94,7 +100,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

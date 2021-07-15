@@ -50,36 +50,38 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n, x, k; cin >> n >> k;
 
-	string s; cin >> n >> s;
+	unordered_map<lo, lo>m;
 
-	bool disbalace  = false;
+	vector<lo>uq;
 
 	for(int i = 0; i < n; i++)
 	{
-		if(s[i] == '(')open++;
-		else close++;
+		cin >> x;
 
-		if(close > open)
+		if(m.find(x) == m.end())
 		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			m[x] = 1;
+			uq.push_back(x);
 		}
 	}
 
-	if(disbalace || open != close)
+	if(uq.size() > k)
 	{
 		cout << -1 << endl; return;
 	}
 
-	cout << res << endl;
+	cout << k*n << endl;
+
+	for(int i = 0; i < n; i++)
+	{
+		for(int j = 0; j < uq.size(); j++)cout << uq[j] << " ";
+
+		for(int j = 0; j < k - uq.size(); j++)cout << uq[0] << " ";
+	}
+
+	cout << endl;
 }
 
 int main()
@@ -94,7 +96,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

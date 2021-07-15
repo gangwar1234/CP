@@ -50,36 +50,52 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	string s; cin >> s;	lo left = -1, right = -1;
 
-	string s; cin >> n >> s;
+	for(int i = 0; i < s.length(); i++)if(s[i] == 'a'){left = i, right = i; break;}
 
-	bool disbalace  = false;
-
-	for(int i = 0; i < n; i++)
+	if(left == -1)
 	{
-		if(s[i] == '(')open++;
-		else close++;
+		cout << "NO" << endl; return;
+	}
 
-		if(close > open)
+	// debug(left);
+	// debug(right);
+
+	lo n = s.length(), i = 0;
+
+	while(left >= 0 && right < n)
+	{
+		i++;
+
+		if(left == 0 && right == n-1)break;
+
+		if(left - 1 < 0)
 		{
-			disbalace = true;
+			if(s[right + 1] != (char)(i+'a'))
+			{
+				cout << "NO" << endl; return;
+			}
+			right++; continue;
 		}
-		else if(close == open)
+		else if(right + 1 == n)
 		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			if(s[left - 1] != (char)(i+'a'))
+			{
+				cout << "NO" << endl; return;
+			}	
+			left--;	continue;	
+		}
+
+		if(s[left - 1] == (char)(i+'a'))left--;
+		else if(s[right + 1] == (char)(i+'a'))right++;
+		else 
+		{
+			cout << "NO" << endl; return;
 		}
 	}
 
-	if(disbalace || open != close)
-	{
-		cout << -1 << endl; return;
-	}
-
-	cout << res << endl;
+	cout << "YES" << endl;
 }
 
 int main()
@@ -94,7 +110,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

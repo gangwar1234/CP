@@ -50,36 +50,35 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n, even = 0, odd = 0; cin >> n;
 
-	string s; cin >> n >> s;
+	if(n == 1){cout << "FastestFinger" << endl; return;}
 
-	bool disbalace  = false;
+	if(n%2 != 0 || n == 2){cout << "Ashishgup" << endl; return;}
 
-	for(int i = 0; i < n; i++)
+
+	while(n%2 == 0)
 	{
-		if(s[i] == '(')open++;
-		else close++;
+		even++; n/=2;
+	}
 
-		if(close > open)
+	lo X = sqrt(n);
+
+	for(int i = 3; i <= X; i+=2)
+	{
+		while(n%i == 0)
 		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			
+			n/=i;
+			odd++;
 		}
 	}
 
-	if(disbalace || open != close)
-	{
-		cout << -1 << endl; return;
-	}
+	if(n > 1)odd++;
 
-	cout << res << endl;
+
+	if(odd == 0 || (odd == 1 && even == 1))cout << "FastestFinger" << endl;
+	else cout << "Ashishgup" << endl;
 }
 
 int main()
@@ -94,7 +93,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

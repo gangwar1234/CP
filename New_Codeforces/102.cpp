@@ -50,36 +50,27 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n; string s; cin >> n >> s;
 
-	string s; cin >> n >> s;
-
-	bool disbalace  = false;
+	vl v(10);
 
 	for(int i = 0; i < n; i++)
 	{
-		if(s[i] == '(')open++;
-		else close++;
-
-		if(close > open)
-		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
-		}
+		if(s[i] == '0' || s[i] == '1')continue;
+		else if(s[i] == '6'){v[3]++; v[5]++;}
+		else if(s[i] == '4'){v[2]+=2; v[3]++;}
+		else if(s[i] == '8'){v[2]+=3; v[7]++;}
+		else if(s[i] == '9'){v[3]+=2; v[2]++; v[7]++;}
+		else v[s[i]-'0']++;
 	}
 
-	if(disbalace || open != close)
+	for(int i = 9; i >= 1; i--)
 	{
-		cout << -1 << endl; return;
+		for(int j = 0; j < v[i]; j++)
+		{
+			cout << i;
+		}
 	}
-
-	cout << res << endl;
 }
 
 int main()

@@ -50,36 +50,55 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo k, n, m; cin >> k >> n >> m; vl a(n), b(m); cin >> a >> b;
 
-	string s; cin >> n >> s;
+	lo ptr1 = 0, ptr2 = 0;
 
-	bool disbalace  = false;
+	vector<lo>res;
 
-	for(int i = 0; i < n; i++)
+	// debug(k);
+	// debug(n);
+	// debug(m);
+
+	while(ptr1 < n || ptr2 < m)
 	{
-		if(s[i] == '(')open++;
-		else close++;
+		// debug(ptr1);
+		// debug(ptr2);
+		// debug(k);
+		if(ptr1 == n)
+		{
+			if(b[ptr2]  > k){cout << -1 << endl; return;}
+			if(b[ptr2] == 0)k++;
+			res.push_back(b[ptr2++]);
+			continue;
+		}
 
-		if(close > open)
+		if(ptr2 == m)
 		{
-			disbalace = true;
+			if(a[ptr1]  > k){cout << -1 << endl; return;}
+			if(a[ptr1] == 0)k++;
+			res.push_back(a[ptr1++]);
+			continue;
 		}
-		else if(close == open)
+
+		if(a[ptr1] < b[ptr2])
 		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			if(a[ptr1] > k){cout << -1 << endl; return;}
+			if(a[ptr1] == 0)k++;
+			res.push_back(a[ptr1++]);
 		}
+		else
+		{
+			if(b[ptr2] > k){cout << -1 << endl; return;}
+			if(b[ptr2] == 0)k++;
+			res.push_back(b[ptr2++]);			
+		}
+
 	}
 
-	if(disbalace || open != close)
-	{
-		cout << -1 << endl; return;
-	}
+	for(auto x : res)cout << x << " ";
 
-	cout << res << endl;
+	cout << endl;
 }
 
 int main()
@@ -94,7 +113,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

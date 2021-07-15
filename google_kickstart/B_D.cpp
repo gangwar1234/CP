@@ -50,33 +50,42 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n, c, minL = LLONG_MAX, maxR = LLONG_MIN, L, R; cin >> n >> c; 
 
-	string s; cin >> n >> s;
+	unordered_map<lo, lo>mL, mR;
 
-	bool disbalace  = false;
+	vector<vector<lo>>v(n, vector<lo>(2));
 
 	for(int i = 0; i < n; i++)
 	{
-		if(s[i] == '(')open++;
-		else close++;
-
-		if(close > open)
-		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
-		}
+		cin >> L >> R;
+		v[i] = {L, R};
+		minL = min(minL, L);
+		maxR = max(maxR, R);
+		mL[L]++;
+		mR[R]++;
 	}
 
-	if(disbalace || open != close)
+	debug(maxR);
+	debug(minL);
+
+	while(maxR - minL - 1 > c)
 	{
-		cout << -1 << endl; return;
+		if(mL[minL] == 0)maxR--;
+		else if(mR[maxR] == 0)minL++;
+		else if(mL[minL] < mR[maxR])minL++;
+		else maxR--;
+	}
+
+	debug(maxR);
+	debug(minL);
+
+
+	lo res = 0;
+
+	for(int i = 0; i < n; i++)
+	{
+		res += (min(maxR, v[i][1]) - max(minL, v[i][0]));
 	}
 
 	cout << res << endl;
@@ -94,11 +103,13 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T, i = 1; cin >>T;
 
 	while(T--)
 	{
+		cout <<"Case #"<<i<<": ";
 		solve();
+		i++;
 	}
 
 	return 0;

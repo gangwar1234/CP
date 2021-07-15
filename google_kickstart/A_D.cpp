@@ -50,36 +50,42 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo g00, g01, g02, g10, g12, g20, g21, g22, g11;
 
-	string s; cin >> n >> s;
+	cin >> g00 >> g01 >> g02 >> g10 >> g12 >> g20 >> g21 >> g22;
 
-	bool disbalace  = false;
+	unordered_map<lo, lo>m;
 
-	for(int i = 0; i < n; i++)
+	lo a = g22 + g00;
+	lo b = g02 + g20;
+	lo c = g12 + g10;
+	lo d = g01 + g21;
+
+	if(a%2 == 0)m[a/2]++;
+	if(b%2 == 0)m[b/2]++;
+	if(c%2 == 0)m[c/2]++;
+	if(d%2 == 0)m[d/2]++;
+
+	lo x, freq = 0;
+
+	for(auto t : m)
 	{
-		if(s[i] == '(')open++;
-		else close++;
-
-		if(close > open)
+		if(freq < t.second)
 		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			x = t.first;
+			freq = t.second;
 		}
 	}
 
-	if(disbalace || open != close)
-	{
-		cout << -1 << endl; return;
-	}
+	// debug(x);
 
-	cout << res << endl;
+
+	if(g01-g00 == g02-g01)freq++;
+	if(g21-g20 == g22-g21)freq++;
+	if(g10-g00 == g20-g10)freq++;
+	if(g12-g02 == g22-g12)freq++;
+
+	cout << freq << endl;
 }
 
 int main()
@@ -94,11 +100,13 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T, i = 1; cin >>T;
 
 	while(T--)
 	{
+		cout << "Case #"<<i<<":";
 		solve();
+		i++;
 	}
 
 	return 0;

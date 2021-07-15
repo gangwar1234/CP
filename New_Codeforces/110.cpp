@@ -50,36 +50,42 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n, k, ptr = 0; cin >> n >> k; vl a(n); cin >> a; 
+	vl w(k); cin >> w;
 
-	string s; cin >> n >> s;
+	sort(a.rbegin(), a.rend());
+	sort(w.begin(), w.end());
 
-	bool disbalace  = false;
+	vector<vector<lo>>weight(k, vector<lo>(2));
 
-	for(int i = 0; i < n; i++)
+	for(int i = 0; i < k; i++)
 	{
-		if(s[i] == '(')open++;
-		else close++;
+		weight[i][0] = a[ptr++];
+		weight[i][1] = weight[i][0];
+		w[i]--;
+	}
 
-		if(close > open)
+	for(int i = 0; i < k; i++)
+	{
+		// debug(ptr);
+		// debug(w[i]);
+
+		if(w[i])
 		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
+			weight[i][1] = a[ptr+w[i]-1];
+			ptr+= (w[i]);
 		}
 	}
 
-	if(disbalace || open != close)
+	lo res = 0;
+
+	for(int i = 0; i < k; i++)
 	{
-		cout << -1 << endl; return;
+		res += (weight[i][0] + weight[i][1]);
 	}
 
 	cout << res << endl;
+
 }
 
 int main()
@@ -94,7 +100,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

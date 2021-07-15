@@ -50,38 +50,31 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n, open = 0, close = 0, res = 0;
+	lo n, k, max_mod = 0, max_freq = 0, x; cin >> n >> k;
 
-	string s; cin >> n >> s;
-
-	bool disbalace  = false;
+	map<lo, lo>m;
 
 	for(int i = 0; i < n; i++)
 	{
-		if(s[i] == '(')open++;
-		else close++;
-
-		if(close > open)
-		{
-			disbalace = true;
-		}
-		else if(close == open)
-		{
-			if(disbalace)
-			res += (close + open);
-			disbalace = false;
-			close = 0, open = 0;
-		}
+		cin >> x;
+		if(x%k == 0)continue;
+		lo mod_val = (k - (x%k))%k;
+		m[mod_val]++;
+		max_freq = max(max_freq, m[mod_val]);
 	}
 
-	if(disbalace || open != close)
+	lo res = 0;
+
+	for(auto a : m)
 	{
-		cout << -1 << endl; return;
+		if(a.second == max_freq)
+		{
+			res = ((max_freq-1)*k + a.first + 1);
+		}
 	}
 
 	cout << res << endl;
 }
-
 int main()
 {
 	#ifndef ONLINE_JUDGE
@@ -94,7 +87,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{
