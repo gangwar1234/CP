@@ -50,71 +50,24 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
-
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
+	string s; cin >> s; char res;
+	unordered_map<char, char>m;
+	m['R'] = 'P';
+	m['P'] = 'S';
+	m['S'] = 'R';
+	lo R = 0, P = 0, S = 0;
+	for(int i = 0; i < s.length(); i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
+		P += (s[i] == 'R');
+		S += (s[i] == 'P');
+		R += (s[i] == 'S');
 	}
 
-	vector<vector<lo>>g(n+1);
+	if(R >= P && R >= S) res = 'R';
+	if(P >= R && P >= S) res = 'P';
+	if(S >= P && S >= R) res = 'S';
 
-	for(int i = 0; i < n; i++)
-	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
-	}
-
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << string(s.length(), res) << endl;
 }
 
 int main()
@@ -129,7 +82,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

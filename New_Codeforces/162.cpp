@@ -3,6 +3,7 @@ using namespace std;
 typedef long long lo;
 typedef vector<lo> vl;
 typedef vector<vl>vll;
+#define MAX 100007
 #define MOD 1000000007
 #define all(v) (v).begin(), (v).end()
 #define debug(x) cerr<<#x<<" = "<<x<<endl;
@@ -46,76 +47,16 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 	}
 }
 
-
+vector<lo>dp(MAX, 0);
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo a, b; cin >> a >> b;
 
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
-
-	for(int i = 0; i < n; i++)
-	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
-	}
-
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << (MOD + (dp[b] - dp[a-1])%MOD)%MOD << endl;
 }
+
+
 
 int main()
 {
@@ -129,7 +70,18 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T, K; cin >> T >> K;
+
+	dp[0] = 1;
+
+	for(int i = 1; i < MAX; i++)
+	{
+		dp[i] = dp[i-1];
+
+		if(i - K >= 0)dp[i] = (dp[i] + dp[i-K])%MOD;
+	}
+
+	for(int i = 1; i < MAX; i++)dp[i] = (dp[i-1] + dp[i])%MOD;
 
 	while(T--)
 	{

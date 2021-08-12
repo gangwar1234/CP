@@ -46,75 +46,60 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 	}
 }
 
+void fill(vector<vector<lo>>&cnt, lo i, string &s, lo n)
+{
+	lo count = 0;
+
+	for(int j = 0; j < s.length(); j++)
+	{
+		count += (s[j] - 'a' == i);
+	}
+
+	cnt[i][n] += (2*count - s.length());
+}
 
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, k, res = 0; cin >> n;
 
-	vector<vector<lo>>Factors;
+	string s;
+
+	vector<vector<lo>>cnt(5, vector<lo>(n));
 
 	for(int i = 0; i < n; i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
+		cin >> s;
 
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
+		for(int j = 0; j < 5; j++)
+			fill(cnt, j, s, i);
 	}
 
-	vector<vector<lo>>g(n+1);
+	// for(int i = 0; i < 5; i++)
+	// {
+	// 	for(int j = 0; j < n; j++)cout << cnt[i][j] << " ";
+	// 	cout << endl;
+	// }
 
-	for(int i = 0; i < n; i++)
+	sort(cnt[0].rbegin(), cnt[0].rend());
+	sort(cnt[1].rbegin(), cnt[1].rend());
+	sort(cnt[2].rbegin(), cnt[2].rend());
+	sort(cnt[3].rbegin(), cnt[3].rend());
+	sort(cnt[4].rbegin(), cnt[4].rend());
+
+	for(int i = 0; i < 5; i++)
 	{
+		lo sum = 0;
+
 		for(int j = 0; j < n; j++)
 		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
+			sum += cnt[i][j];
+			if(sum <= 0)break;
+			res = max(res, (lo)(j + 1));
 		}
 	}
 
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << res << endl;
 }
 
 int main()
@@ -129,7 +114,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

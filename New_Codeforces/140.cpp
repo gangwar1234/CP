@@ -50,72 +50,71 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, max_idx, min_idx; cin >> n; vl v(n); cin >> v;
 
-	vector<vector<lo>>Factors;
+	lo max_e = *max_element(v.begin(), v.end());
 
-	for(int i = 0; i < n; i++)
+	lo l1 = max_e, r1 = n - max_e;
+
+	lo l2 = n - max_e, r2 = max_e;
+
+	vector<lo>a(n, 0);
+
+	for(int i = 0; i < max_e; i++)a[v[i]]++;
+
+	bool flaga = true, flagb = true;
+
+	for(int i = 1; i <= max_e; i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
+		if(a[i] == 0)
 		{
-			val/=2;
-			cnt2++;
+			flaga = false;
 		}
+	} 
 
-		while(val%3 == 0)
+	a = vector<lo>(n,0);
+
+	for(int i = max_e; i < n; i++)a[v[i]]++;
+	
+	for(int i = 1; i <= n - max_e; i++)
+	{
+		if(a[i] == 0)flaga = false;
+	}	
+
+	a = vector<lo>(n, 0);
+
+	for(int i = 0; i < n - max_e; i++)a[v[i]]++;
+
+	for(int i = 1; i <= n - max_e; i++)
+	{
+		if(a[i] == 0)
 		{
-			val/=3;
-			cnt3++;
+			flagb = false;
 		}
+	} 
 
-		Factors.push_back({cnt2, cnt3});
+	a = vector<lo>(n,0);
+
+	for(int i = n-max_e; i < n; i++)a[v[i]]++;
+	
+	for(int i = 1; i <= max_e; i++)
+	{
+		if(a[i] == 0)flagb = false;
 	}
 
-	vector<vector<lo>>g(n+1);
+	vector<vector<lo>>res;
 
-	for(int i = 0; i < n; i++)
+	if(flaga)res.push_back({l1, r1});
+	if(flagb && !(l1 == l2 && r1 == r2))res.push_back({l2, r2});
+
+	cout << res.size() << endl;
+
+	for(int i = 0; i < res.size(); i++)
 	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
+		cout << res[i][0] << " " << res[i][1] << endl;
 	}
-
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
 }
+
 
 int main()
 {
@@ -129,7 +128,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

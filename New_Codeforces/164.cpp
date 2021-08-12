@@ -46,75 +46,36 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 	}
 }
 
-
+bool cmp(vector<lo>&a, vector<lo>&b)
+{
+	return (a[1] < b[1]);
+}
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
-
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
+	lo n, r, avg, s = 0; cin >> n >> r >> avg;
+	vector<vector<lo>>v(n, vector<lo>(2));
 
 	for(int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
+		cin >> v[i][0] >> v[i][1];
+		s += v[i][0];
 	}
 
-	lo head = 0;
+	sort(v.begin(), v.end(), cmp);
+
+	lo sum = max(0LL, avg*n - s), cost = 0; 
 
 	for(int i = 0; i < n; i++)
 	{
-		lo cnt = 0, j = i;
+		cost += (min(r - v[i][0], sum))*v[i][1];
+		sum -= min(r-v[i][0], sum);
 
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
+		if(sum == 0)break;
 	}
 
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
+	cout << cost << endl;
 
-	cout << v[head] << endl;
 }
 
 int main()

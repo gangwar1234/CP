@@ -46,75 +46,55 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 	}
 }
 
+void rec(vector<vector<lo>>&mat, lo i, lo j, lo n, lo val, lo &cnt)
+{
+	if(cnt == val)return;
 
+	mat[i][j] = val;
+
+	cnt++;
+
+	if(i + 1 < n && mat[i+1][j] == 0)
+	{
+		rec(mat, i + 1, j, n, val, cnt);
+	}
+
+	if(j - 1 >= 0 && mat[i][j-1] == 0)
+	{
+		rec(mat, i, j-1, n, val, cnt);
+	}
+}
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n; cin >> n;
 
-	vector<vector<lo>>Factors;
+	vector<vector<lo>>mat(n, vector<lo>(n));
 
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
+	map<lo, lo>m;
 
 	for(int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
+		cin >> mat[i][i];
+		m[mat[i][i]] = i;
 	}
 
-	lo head = 0;
+	for(int i = n-1; i >=0 ; i--)
+	{
+		lo cnt = 0;
+
+		rec(mat, i, i, n, mat[i][i], cnt);
+	}
 
 	for(int i = 0; i < n; i++)
 	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
+		for(int j = 0; j <= i; j++)
 		{
-			cnt++;
-			j = g[j][0];
+			cout << mat[i][j] << " ";
 		}
 
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
+		cout << endl;
 	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
 }
 
 int main()

@@ -50,71 +50,31 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
-
-	vector<vector<lo>>Factors;
+	lo n, x, sum1 = 0, sum2 = 0, last = 1; cin >> n; vl a, b;
 
 	for(int i = 0; i < n; i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
+		cin >> x;
 
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
+		if(x > 0){a.push_back(x); sum1 += a.back(); last = 1;}
+		else {b.push_back(abs(x)); sum2 += b.back(); last = 2;}
 	}
 
-	vector<vector<lo>>g(n+1);
-
-	for(int i = 0; i < n; i++)
+	if(sum1 == sum2)
 	{
-		for(int j = 0; j < n; j++)
+		for(int i = 0; i < a.size() && i < b.size(); i++)
 		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
+			if(a[i] > b[i]){last = 1; break;} 
+
+			if(a[i] < b[i]){last = 2;break;}
 		}
 	}
 
-	lo head = 0;
+	if(sum1 < sum2)last = 2;
+	if(sum1 > sum2)last = 1;
 
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	if(last == 1)cout << "first" << endl;
+	else cout << "second" << endl;
 }
 
 int main()

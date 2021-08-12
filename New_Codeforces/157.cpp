@@ -46,75 +46,52 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 	}
 }
 
+void superior(vl &a, vl &mv, lo &res, lo i)
+{
+	lo cnt = 0;
 
+	if(a[0] < mv[0])cnt++;
+	if(a[1] < mv[1])cnt++;
+	if(a[2] < mv[2])cnt++;
+	if(a[3] < mv[3])cnt++;
+	if(a[4] < mv[4])cnt++;
+
+	if(cnt > 2)mv = a, res = i;
+}
+
+bool check(vl mv, vl a)
+{
+	lo cnt = 0;
+
+	if(a[0] < mv[0])cnt++;
+	if(a[1] < mv[1])cnt++;
+	if(a[2] < mv[2])cnt++;
+	if(a[3] < mv[3])cnt++;
+	if(a[4] < mv[4])cnt++;
+
+	if(cnt > 2)return false;
+	return true;	
+}
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, res; cin >> n; vl v(5), maxv(5, INT_MAX);
 
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
+	vector<vector<lo>>x(n);
 
 	for(int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
+		cin >> v;
+		x[i] = v;
+		superior(v, maxv, res, i);
 	}
-
-	lo head = 0;
 
 	for(int i = 0; i < n; i++)
 	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
+		if(!check(maxv, x[i])){cout << -1 << endl; return;}
 	}
 
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << (res+1) << endl;
 }
 
 int main()
@@ -129,7 +106,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

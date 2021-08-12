@@ -50,71 +50,46 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, k, idx = 0, m; cin >> n >> k;
 
-	vector<vector<lo>>Factors;
+	deque<lo>qPow;	m = n;
 
-	for(int i = 0; i < n; i++)
+	while(n)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
+		if(n%2)qPow.push_back(idx);
+		n/=2;
+		idx++;
 	}
 
-	vector<vector<lo>>g(n+1);
 
-	for(int i = 0; i < n; i++)
+	if(m < k || qPow.size() > k)
+	{  
+		cout << "NO" << endl; return;
+	}
+
+	while(qPow.size() < k)
 	{
-		for(int j = 0; j < n; j++)
+
+		lo a = qPow.front();
+		qPow.pop_front();
+
+		if(a > 1){qPow.push_front(a-1); qPow.push_front(a-1);}
+		else 
 		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
+			if(a == 1) qPow.push_back(0); 
+			qPow.push_back(0);
 		}
 	}
 
-	lo head = 0;
+	cout << "YES" << endl;
 
-	for(int i = 0; i < n; i++)
+	while(qPow.size())
 	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
+		cout << pow(2,qPow.front()) << " ";
+		qPow.pop_front();
 	}
 
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << endl;
 }
 
 int main()

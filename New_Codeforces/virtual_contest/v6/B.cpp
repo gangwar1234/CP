@@ -50,71 +50,55 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, m, bit = 1; cin >> n >> m;
 
-	vector<vector<lo>>Factors;
+	vector<string>v(n, string(m, '0'));
+
+	for(int i = 0; i < m; i+=2) v[0][i] = '1';
+	
+
+	for(int i = 2; i < n - 1; i+=2)
+	{
+		v[i][0] = '1';
+		v[i][m-1] = '1';
+	}
+
+	if(1&n) for(int i = 0; i < m; i+=2)v[n-1][i] = '1';
+	
+	vector<string>v1(n, string(m, '0'));
+
+	for(int i = 1; i < m; i+=2) v1[0][i] = '1';
+	
+	for(int i = 2; i < n - 1; i+=2)
+	{
+		v1[i][0] = '1';
+		v1[i][m-1] = '1';
+	}
+
+	if(1&n) for(int i = 1; i < m; i+=2)v1[n-1][i] = '1';
+
+	lo cnt1 = 0, cnt2 = 0;
 
 	for(int i = 0; i < n; i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
+		for(int j = 0; j < m; j++)if(v[i][j] == '1')cnt1++;
 	}
-
-	vector<vector<lo>>g(n+1);
-
+	
 	for(int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
+		for(int j = 0; j < m; j++)if(v1[i][j] == '1')cnt2++;
 	}
 
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
+	if(cnt1 > cnt2)
 	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
+		for(int i = 0; i < n; i++)cout << v[i] << endl;
 	}
+    else
+    {
+    	for(int i = 0; i < n; i++)cout << v1[i] << endl;
+    }
 
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << endl;
 }
 
 int main()
@@ -129,7 +113,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{
@@ -137,5 +121,4 @@ int main()
 	}
 
 	return 0;
-
 }

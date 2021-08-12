@@ -50,71 +50,62 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, m; cin >> n; 
 
-	vector<vector<lo>>Factors;
+	string s; cin >> s;
 
-	for(int i = 0; i < n; i++)
+	vector<vector<lo>>dp(n+1, vector<lo>(3, 0));
+	vector<lo>p(n+1,-1);
+
+	for(int i = 1; i <= n; i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
+		dp[i][0] = min(dp[i-1][1], dp[i-1][2]) + !(s[i-1] == 'R');
+		dp[i][1] = min(dp[i-1][0], dp[i-1][2]) + !(s[i-1] == 'B');
+		dp[i][2] = min(dp[i-1][1], dp[i-1][0]) + !(s[i-1] == 'G');
 	}
 
-	vector<vector<lo>>g(n+1);
+	if(dp[n][0] <= dp[n][1] && dp[n][0] <= dp[n][2]) m = 0;
+	else if(dp[n][1] <= dp[n][2] && dp[n][1] <= dp[n][0]) m = 1;
+	else if(dp[n][2] <= dp[n][1] && dp[n][2] <= dp[n][0]) m = 2;
 
-	for(int i = 0; i < n; i++)
+	lo i = n;
+
+	while(i > 0 )
 	{
-		for(int j = 0; j < n; j++)
+		p[i] = m;
+		i--;
+		
+		if(m == 0)
 		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
+			if(dp[i][1] < dp[i][2])m=1;
+			else m = 2;
+		}	
+		else if(m == 1)
+		{
+			if(dp[i][0] < dp[i][2])m=0;
+			else m = 2;			
 		}
-	}
-
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
+		else
 		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
+			if(dp[i][0] < dp[i][1])m=0;
+			else m = 1;
 		}
 	}
 
-	while(g[head].size())
+	cout << min(dp[n][0], min(dp[n][1], dp[n][2])) << endl;
+
+	for(int i = 1; i <= n; i++)
 	{
-		cout << v[head] << " ";
-		head = g[head][0];
+		char r;
+		if(p[i] == 0)r = 'R';
+		else if(p[i] == 1)r = 'B';
+		else if(p[i] == 2)r = 'G';
+
+		cout << r;
 	}
 
-	cout << v[head] << endl;
+	cout << endl;
+
 }
 
 int main()

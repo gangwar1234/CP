@@ -50,71 +50,42 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, l, cnt = 0, r, x; cin >> n >> l >> r >> x; vl v(n); cin >> v;
 
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
+	for(int i = 0; i < (1 << n); i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
+		lo min_val = LLONG_MAX, max_val = LLONG_MIN;
 
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
+		vl a;
 
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
-
-	for(int i = 0; i < n; i++)
-	{
 		for(int j = 0; j < n; j++)
 		{
-			if(j != i)
+			if((i&(1<<j)))
 			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
+				min_val = min(min_val, v[j]);
+				max_val = max(max_val, v[j]);
+				a.push_back(v[j]);
+			}
+		}
+
+		if(a.size() > 1)
+		{
+			lo sum = accumulate(a.begin(), a.end(), 0);
+			if(sum >= l && sum <= r && max_val - min_val >= x)
+			{
+				cnt++;
+
+				// for(int j = 0; j < a.size(); j++)
+				// {
+				// 	cout << a[j] << " ";
+				// }
+
+				// cout << endl;
 			}
 		}
 	}
 
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << cnt << endl;
 }
 
 int main()

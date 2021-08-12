@@ -50,71 +50,37 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, x; cin >> n;
 
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
+	map<lo, lo>m;
 
 	for(int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
+		cin >> x;
+		m[x]++;
 	}
 
-	lo head = 0;
+	priority_queue<vector<lo>>pq;
 
-	for(int i = 0; i < n; i++)
+	for(auto a : m)
 	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
+		pq.push({a.second, a.first});
 	}
 
-	while(g[head].size())
+	while(pq.size() > 1)
 	{
-		cout << v[head] << " ";
-		head = g[head][0];
+		vl a = pq.top(); pq.pop();
+		vl b = pq.top(); pq.pop();
+
+		a[0]--; b[0]--;
+
+		if(a[0])pq.push(a);
+		if(b[0])pq.push(b);
+
+		n -= 2;
 	}
 
-	cout << v[head] << endl;
+	cout << n << endl;
 }
 
 int main()
@@ -129,7 +95,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

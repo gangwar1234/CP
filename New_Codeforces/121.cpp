@@ -46,75 +46,67 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 	}
 }
 
+string StringMake(deque<lo>a)
+{
+	string s = "";
 
+	while(a.size())
+	{
+		s += to_string(a.front());
+		a.pop_front();
+	}
+
+	return s;
+}
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, cnt = 0; cin >> n;
 
-	vector<vector<lo>>Factors;
+	lo k1;  cin >> k1; vl a(k1); cin>> a;
 
-	for(int i = 0; i < n; i++)
+	lo k2; cin >> k2; vl b(k2); cin >> b;
+
+	unordered_map<string, bool>seen1, seen2;
+
+	deque<lo>q1, q2;
+
+	for(int i = 0; i < k1; i++)q1.push_back(a[i]);
+	for(int i = 0; i < k2; i++)q2.push_back(b[i]);
+
+	seen1[StringMake(q1)] = true;
+	seen2[StringMake(q2)] = true;
+
+	while(q1.size() && q2.size())
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
+		lo x = q1.front(); q1.pop_front();
+		lo y = q2.front(); q2.pop_front();
 
-		while(val%2 == 0)
+		if(x < y)
 		{
-			val/=2;
-			cnt2++;
+			q2.push_back(x);
+			q2.push_back(y);
+		}
+		else
+		{
+			q1.push_back(y);
+			q1.push_back(x);
 		}
 
-		while(val%3 == 0)
+		if(seen1[StringMake(q1)] && seen2[StringMake(q2)])
 		{
-			val/=3;
-			cnt3++;
+			cout << -1 << endl; return;
 		}
 
-		Factors.push_back({cnt2, cnt3});
+		seen1[StringMake(q1)] = true;
+		seen2[StringMake(q2)] = true;
+
+		cnt++;
 	}
 
-	vector<vector<lo>>g(n+1);
+	if(q1.size())cout << cnt << " " << 1 << endl;
+	else cout << cnt << " " << 2 << endl;
 
-	for(int i = 0; i < n; i++)
-	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
-	}
-
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
 }
 
 int main()

@@ -8,33 +8,33 @@ typedef vector<vl>vll;
 #define debug(x) cerr<<#x<<" = "<<x<<endl;
 #define REPV(a, b, c) for (lo(a) = b; (a) < (c); (a)++) 
 #define REP(a,b) for(lo i =(a) ;i<(b);i++)
-
+ 
 template <typename T>
-
+ 
 istream &operator>>(istream &in, vector<T> &v)
 {
 	for (unsigned i = 0; i < v.size(); i++)
 		in >> v[i];
 	return in;
 }
-
+ 
 lo gcd(lo a, lo b)
 {
 	if(a == 0)return b;
-
+ 
 	return gcd(b%a, a);
 }
-
+ 
 lo power(lo x, lo y)
 {
 	if(y == 0)return 1;
 	lo temp = power(x, y/2);
 	temp = (temp*temp)%MOD;
 	if(1&y)return (x*temp)%MOD;
-
+ 
 	return temp;
 }
-
+ 
 void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 {
 	visited[start] = true;
@@ -45,97 +45,26 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 		dfs(child,g,visited);
 	}
 }
-
-
-
-void solve()
-{
-	lo n; cin >> n; vl v(n); cin >> v;
-
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
-
-	for(int i = 0; i < n; i++)
-	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
-	}
-
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
-}
-
+ 
 int main()
 {
 	#ifndef ONLINE_JUDGE
 	freopen("input.txt","r",stdin);
 	freopen("output.txt","w",stdout);
 	#endif
-
+ 
 	ios::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 	cout.precision(20);
-
-	lo T; T = 1;
-
+ 
+	lo T; cin >>T;
+ 
 	while(T--)
 	{
 		solve();
 	}
-
+ 
 	return 0;
-
+ 
 }

@@ -46,76 +46,52 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 	}
 }
 
+vector<bool>prime(1001, true);
+vector<lo>primeDiv(1001,0);
+unordered_map<lo, lo>m;
 
+void seive()
+{
+
+	for(int i = 2; i*i < 1001; i++)
+	{
+		if(!prime[i])continue;
+
+		primeDiv[i] = i;
+
+		for(int j = 2*i; j < 1001; j+=i)
+		{
+			prime[j] = false;
+
+			if(primeDiv[j] == 0)primeDiv[j] = i;
+		}
+	}
+}
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, color = 1; cin >> n; vl v(n); cin >> v;
 
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
+	unordered_map<lo,lo>colorPr; vl res;
 
 	for(int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n; j++)
+		if(colorPr[primeDiv[v[i]]] == 0)
 		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
-	}
-
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
+			colorPr[primeDiv[v[i]]] = color++;
 		}
 
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
+		res.push_back(colorPr[primeDiv[v[i]]]);
 	}
 
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
+	cout << color-1 << endl;
 
-	cout << v[head] << endl;
+	for(int i = 0; i < n; i++)cout << res[i] << " ";
+
+	cout << endl;
 }
+
+
 
 int main()
 {
@@ -129,7 +105,9 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
+
+	seive();
 
 	while(T--)
 	{

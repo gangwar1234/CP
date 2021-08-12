@@ -50,71 +50,25 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	string s; cin >> s;
 
-	vector<vector<lo>>Factors;
+	lo prev = 1, Bprev = 0, curr = 0;
 
-	for(int i = 0; i < n; i++)
+	for(int i = 0; i < s.length(); i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
+		if(s[i] == 'm' || s[i] == 'w')
 		{
-			val/=2;
-			cnt2++;
+			cout << 0 << endl; return;
 		}
+		if(i - 1 >= 0 && (s[i-1] == 'u' && s[i] == 'u') || (s[i-1] == 'n' && s[i] == 'n'))curr = (prev + Bprev)%MOD;
+		else curr = prev;
 
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
+		lo temp = prev;
+		prev = curr;
+		Bprev =  temp;
 	}
 
-	vector<vector<lo>>g(n+1);
-
-	for(int i = 0; i < n; i++)
-	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
-	}
-
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
-	}
-
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << curr << endl;
 }
 
 int main()

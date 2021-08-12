@@ -50,71 +50,44 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, x; cin >> n; 
 
-	vector<vector<lo>>Factors;
-
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
+	unordered_map<lo, lo>m;
 
 	for(int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
-		}
+		cin >> x;
+		m[x]++;
 	}
 
-	lo head = 0;
+	lo cnt4 = 0, cnt2 = 0;
 
-	for(int i = 0; i < n; i++)
+	for(auto a : m)
 	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
-		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
-		}
+		cnt4 += (a.second/4);
+		cnt2 += (a.second/2);
 	}
 
-	while(g[head].size())
+	lo q; cin >> q;
+	
+	while(q--)
 	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
+		char ch; lo num;
 
-	cout << v[head] << endl;
+		cin >> ch >> num;
+
+		cnt2 -= (m[num]/2);
+		cnt4 -= (m[num]/4);
+
+		if(ch == '+')m[num]++;
+		if(ch == '-')m[num]--;
+
+		cnt2 += (m[num]/2);
+		cnt4 += (m[num]/4);
+
+		if(cnt2 >= 4 && cnt4 >= 1) cout << "YES" << endl;
+		else cout << "NO" << endl;
+	}
 }
 
 int main()

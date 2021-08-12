@@ -50,71 +50,50 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	string s; cin >> s; vl res;
 
-	vector<vector<lo>>Factors;
+	lo n = s.length();
 
-	for(int i = 0; i < n; i++)
+	string p = s;
+
+	for(int i = 0; i < n - 4; i++)
 	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
+		string t = s.substr(i, 5);
 
-		while(val%2 == 0)
+		if(t == "twone")
 		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
-
-	for(int i = 0; i < n; i++)
-	{
-		for(int j = 0; j < n; j++)
-		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
+			s[i+2] = '#';
+			res.push_back(i+3);
 		}
 	}
 
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
+	for(int i = 0; i < n - 2; i++)
 	{
-		lo cnt = 0, j = i;
+		string t = s.substr(i, 3);
 
-		while(g[j].size())
+		if(t == "one")
 		{
-			cnt++;
-			j = g[j][0];
+			
+			res.push_back(i+2);
+			s[i+1] = '$';
 		}
 
-		if(cnt == n - 1)
+		if(t == "two")
 		{
-			head = i;
-			break;
+			res.push_back(i+2);
+			s[i+1] = '#';
 		}
 	}
 
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
+	// debug(s);
 
-	cout << v[head] << endl;
+	sort(all(res));
+
+	cout << res.size() << endl;
+
+	for(auto x : res)cout << x << " ";
+
+	cout << endl;
 }
 
 int main()
@@ -129,7 +108,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{

@@ -50,71 +50,33 @@ void dfs(lo start, vector<vector<lo>>&g, vector<lo>&visited)
 
 void solve()
 {
-	lo n; cin >> n; vl v(n); cin >> v;
+	lo n, k, x; cin >> n >> k;
 
-	vector<vector<lo>>Factors;
+	lo LIM = log2(10e16)/log2(k);
 
-	for(int i = 0; i < n; i++)
-	{
-		lo val = v[i], cnt2 = 0, cnt3 = 0;
-
-		while(val%2 == 0)
-		{
-			val/=2;
-			cnt2++;
-		}
-
-		while(val%3 == 0)
-		{
-			val/=3;
-			cnt3++;
-		}
-
-		Factors.push_back({cnt2, cnt3});
-	}
-
-	vector<vector<lo>>g(n+1);
+	vector<lo>v(LIM+1);
 
 	for(int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n; j++)
+		cin >> x;	lo ptr = 0;
+
+		while(x)
 		{
-			if(j != i)
-			{
-				if((Factors[i][0] == Factors[j][0] - 1 && Factors[i][1] == Factors[j][1])||(Factors[i][0] == Factors[j][0] && Factors[i][1] == Factors[j][1] + 1))
-				{
-					g[i].push_back(j);
-				}
-			}
+			v[ptr] += x%k;
+			x/=k;
+			ptr++;
 		}
 	}
 
-	lo head = 0;
-
-	for(int i = 0; i < n; i++)
+	for(int i = 0; i <= LIM; i++)
 	{
-		lo cnt = 0, j = i;
-
-		while(g[j].size())
+		if(v[i] > 1)
 		{
-			cnt++;
-			j = g[j][0];
-		}
-
-		if(cnt == n - 1)
-		{
-			head = i;
-			break;
+			cout << "NO" << endl; return;
 		}
 	}
 
-	while(g[head].size())
-	{
-		cout << v[head] << " ";
-		head = g[head][0];
-	}
-
-	cout << v[head] << endl;
+	cout << "YES" << endl;
 }
 
 int main()
@@ -129,7 +91,7 @@ int main()
 	cout.tie(NULL);
 	cout.precision(20);
 
-	lo T; T = 1;
+	lo T; cin >>T;
 
 	while(T--)
 	{
